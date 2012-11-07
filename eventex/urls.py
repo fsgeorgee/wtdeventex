@@ -6,9 +6,9 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('eventex.core.views',
-    url(r'^$', 'homepage', name='homepage'),
-    url(r'^inscricao/$', 'eventex.subscriptions.views.subscribe', name='subscribe'),
+urlpatterns = patterns('eventex',
+    url(r'^$', 'core.views.homepage', name='homepage'),
+    url(r'^inscricao/$', 'subscriptions.views.subscribe', name='subscribe'),
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
