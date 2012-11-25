@@ -2,16 +2,32 @@
 
 from django.http import HttpResponseRedirect
 from django.views.generic.simple import direct_to_template
+from django.shortcuts import get_object_or_404
 from eventex.subscriptions.forms import SubscriptionForm
 from eventex.subscriptions.models import Subscription
+#from django.http import HttpResponse
 
 def subscribe(request):
     if request.method == 'POST':
-        '''form = SubscriptionForm(request.POST)
-        form.is_valid()
-        obj = Subscription(**form.cleaned_data)
-        obj.save() '''
-        return HttpResponseRedirect('/inscricao/%d/' % 1)#obj.pk)
+        return create(request)
     else:
-        return direct_to_template(request,'subscriptions/subscription_form.html', 
+        return new(request)        
+
+def new(request):
+    return direct_to_template(request,'subscriptions/subscription_form.html', 
                                     {'form':SubscriptionForm()})
+
+def create(request):
+    form = SubscriptionForm(request.POST)
+    if not form.is_valid():
+        return direct_to_template(request,
+                    'subscriptions/subscription_form.html',
+                    {'form': form})
+    obj = Subscription(**form.cleaned_data)
+    obj.save()
+    return HttpResponseRedirect('/inscricao/%d/' % obj.pk)
+
+def success(request, pk):
+    subscription = get_object_or_404(Subscription, pk=pk)
+    return direct_to_template(request, 'subscriptions/Subscription_detail.html',
+                {'subscription': subscription})
